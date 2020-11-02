@@ -1,4 +1,4 @@
-version 2020.11.2
+version 2020.11.2.1
 
 Core
 * [YoutubeDL] Add suport only for authentication through Proxy (Basic)
