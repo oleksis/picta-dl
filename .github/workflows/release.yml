@@ -1,0 +1,194 @@
+name: Upload Release Asset - PyPi Publish
+
+on: 
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build_windows_exe:
+    runs-on: windows-latest
+    outputs:
+      picta_version: ${{ steps.dump_version.outputs.picta_version }}
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      sha2_windows: ${{ steps.sha2_file.outputs.sha2_windows }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7.7
+      uses: actions/setup-python@v2
+      with:
+          python-version: '3.7.7'
+          architecture: 'x64'
+    - name: Install Requirements
+      run: pip install -r requirements.txt
+    - name: Build PyInstaller
+      run: python setup.py pyinstaller
+    - name: Dump version and release body
+      id: dump_version
+      shell: python
+      run: |
+        import json
+        import re
+        
+        exec(compile(open('picta_dl/version.py').read(), 'picta_dl/version.py', 'exec'))
+        print('::set-output name=picta_version::' + __version__)
+        
+        with open('ChangeLog', encoding='utf-8') as inf:
+            changelog = inf.read()
+            
+        mobj = re.search(r'(?s)version %s\n{2}(.+?)\n{3}' % __version__, changelog)
+        body = mobj.group(1) if mobj else ''
+        body = json.dumps(body).encode('utf-8').decode('utf-8')
+        print('::set-output name=picta_changelog::' + body)
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: picta-dl ${{ steps.dump_version.outputs.picta_version }}
+        body: ${{ fromJson(steps.dump_version.outputs.picta_changelog) }}
+        draft: false
+        prerelease: false
+    - name: Upload Executable picta-dl.exe
+      id: upload-release-asset 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./dist/picta-dl.exe
+        asset_name: picta-dl.exe
+        asset_content_type: application/octet-stream
+    - name: Get SHA2-256SUMS for picta-dl.exe
+      id: sha2_file
+      env:
+        SHA2: ${{ hashFiles('dist/picta-dl.exe') }}
+      run: echo "::set-output name=sha2_windows::${env:SHA2}"
+  build_ubuntu_bdist:
+    needs: build_windows_exe
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7.7
+      uses: actions/setup-python@v2
+      with:
+          python-version: '3.7.7'
+          architecture: 'x64'
+    - name: Install Requirements
+      run: pip install -r requirements.txt
+    - name: Install packages Ubuntu for ManPages
+      run: sudo apt-get -y install zip pandoc man
+    - name: Run Make
+      run: make
+    - name: Build Binary Distribution
+      run: python setup.py bdist
+    - name: Upload Tar-Gz Distribution to Release
+      id: upload-release-targz 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.build_windows_exe.outputs.upload_url }}
+        asset_path: ./dist/picta_dl-${{ needs.build_windows_exe.outputs.picta_version }}.linux-x86_64.tar.gz
+        asset_name: picta_dl-${{ needs.build_windows_exe.outputs.picta_version }}.linux-x86_64.tar.gz
+        asset_content_type: application/octet-stream
+    - name: Build Binary using PyInstaller ManyLinux 2014 Docker Action
+      uses: oleksis/pyinstaller-manylinux@v1
+      with:
+        pyinstaller-params: "['-c', '-F', '--icon=assets/picta-dl.ico', '--exclude-module=test', '--name=picta-dl', 'picta_dl/__main__.py']"
+    - name: Upload Binary Distribution to Release
+      id: upload-release-binary 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.build_windows_exe.outputs.upload_url }}
+        asset_path: ./dist/picta-dl
+        asset_name: picta-dl
+        asset_content_type: application/octet-stream
+    - name: Get SHA2-256SUMS for picta_dl*.tar.gz
+      id: sha2_file_targz
+      env:
+        SHA2: ${{ hashFiles('dist/*.tar.gz') }}
+      run: echo "::set-output name=sha2_ubuntu::$SHA2"
+    - name: Get SHA2-256SUMS for picta-dl
+      id: sha2_file_binary
+      env:
+        SHA2: ${{ hashFiles('dist/picta-dl') }}
+      run: echo "::set-output name=sha2_ubuntu::$SHA2"
+    - name: Make SHA2-256SUMS file
+      env:
+        SHA2_WINDOWS: ${{ needs.build_windows_exe.outputs.sha2_windows }}
+        SHA2_UBUNTU_TARGZ: ${{ steps.sha2_file_targz.outputs.sha2_ubuntu }}
+        SHA2_UBUNTU_BINARY: ${{ steps.sha2_file_binary.outputs.sha2_ubuntu }}
+        PICTA_VERSION: ${{ needs.build_windows_exe.outputs.picta_version }}
+      run: |
+        echo "$SHA2_WINDOWS picta-dl.exe" > SHA2-256SUMS
+        echo "$SHA2_UBUNTU_BINARY picta-dl" >> SHA2-256SUMS
+        echo "$SHA2_UBUNTU_TARGZ picta_dl-$PICTA_VERSION.linux-x86_64.tar.gz" >> SHA2-256SUMS
+    - name: Upload SHA2-256SUMS to Release
+      id: upload-release-sha2 
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.build_windows_exe.outputs.upload_url }}
+        asset_path: ./SHA2-256SUMS
+        asset_name: SHA2-256SUMS
+        asset_content_type: text/plain
+  make_sdist:
+    name: Make SDist
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7.7
+      uses: actions/setup-python@v2
+      with:
+          python-version: '3.7.7'
+          architecture: 'x64'
+    - name: Install deps
+      run: python -m pip install "setuptools>=42"
+    - name: Build Sdist
+      run: python setup.py sdist
+    - uses: actions/upload-artifact@v2
+      with:
+        path: dist/*.tar.gz
+  build_wheels:  # https://scikit-hep.org/developer/gha_wheels
+    name: Wheel on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7.7
+      uses: actions/setup-python@v2
+      with:
+          python-version: '3.7.7'
+          architecture: 'x64'
+    - name: Install cibuildwheel 1.4.2
+      run: python -m pip install cibuildwheel==1.4.2
+    - name: Build wheel
+      run: python -m cibuildwheel --output-dir wheelhouse
+      env:
+        CIBW_SKIP: pp* cp27-win* cp35-win*
+    - name: Upload wheels
+      uses: actions/upload-artifact@v2
+      with:
+        path: wheelhouse/*.whl
+  pypi_publish:
+    needs: [build_wheels, make_sdist]
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/download-artifact@v2
+      with:
+        name: artifact
+        path: dist
+
+    - uses: pypa/gh-action-pypi-publish@v1.2.2
+      with:
+        user: __token__
+        password: ${{ secrets.PYPI_PASSWORD }}
