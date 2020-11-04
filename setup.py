@@ -90,7 +90,7 @@ class BuildPyinstallerBin(Command):
                                 StringStruct("InternalName", "picta-dl.exe"),
                                 StringStruct(
                                     "LegalCopyright",
-                                    "https://github.com/oleksis/youtube-dl/tree/picta-dl/LICENSE",
+                                    "https://github.com/oleksis/picta-dl/LICENSE",
                                 ),
                                 StringStruct("OriginalFilename", "picta-dl.exe"),
                                 StringStruct("ProductName", "Picta-DL"),
@@ -205,7 +205,7 @@ setup(
     version=__version__,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
-    url="https://github.com/oleksis/youtube-dl/tree/picta-dl",
+    url="https://github.com/oleksis/picta-dl",
     author="Ricardo Garcia",
     author_email="ytdl@yt-dl.org",
     maintainer="Oleksis Fraga",

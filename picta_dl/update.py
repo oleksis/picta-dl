@@ -183,7 +183,7 @@ def update_self(to_screen, verbose, opener):
     """Update the program file with the latest version from GITHUB"""
 
     GITHUB_API = "https://api.github.com/"
-    JSON_URL = GITHUB_API + 'repos/oleksis/youtube-dl/releases/latest'
+    JSON_URL = GITHUB_API + 'repos/oleksis/picta-dl/releases/latest'
 
     if not isinstance(globals().get('__loader__'), zipimporter) and not hasattr(sys, 'frozen'):
         to_screen('It looks like you installed picta-dl with a package manager, pip, setup.py or a tarball. Please use that to update.')

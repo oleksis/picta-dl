@@ -1,4 +1,4 @@
-![Build Status](https://github.com/oleksis/youtube-dl/workflows/Upload%20Release%20Asset%20-%20PyPi%20Publish/badge.svg)
+![Build Status](https://github.com/oleksis/picta-dl/workflows/Upload%20Release%20Asset%20-%20PyPi%20Publish/badge.svg)
 
 picta-dl - Download videos from Picta.cu Plataforma de Contenidos Audiovisuales and Youtube.com
 
@@ -19,15 +19,15 @@ picta-dl - Download videos from Picta.cu Plataforma de Contenidos Audiovisuales 
 
 To install it right away for all UNIX users (Linux, macOS, etc.), type:
 
-    sudo curl -L https://github.com/oleksis/youtube-dl/releases/download/v2020.11.2.1/picta-dl -o /usr/local/bin/picta-dl
+    sudo curl -L https://github.com/oleksis/picta-dl/releases/download/v2020.11.2.1/picta-dl -o /usr/local/bin/picta-dl
     sudo chmod a+rx /usr/local/bin/picta-dl
 
 If you do not have curl, you can alternatively use a recent wget:
 
-    sudo wget https://github.com/oleksis/youtube-dl/releases/download/v2020.11.2.1/picta-dl -O /usr/local/bin/picta-dl
+    sudo wget https://github.com/oleksis/picta-dl/releases/download/v2020.11.2.1/picta-dl -O /usr/local/bin/picta-dl
     sudo chmod a+rx /usr/local/bin/picta-dl
 
-Windows users can [download an .exe file](https://github.com/oleksis/youtube-dl/releases/download/v2020.11.2.1/picta-dl.exe) and place it in any location on their [PATH](https://en.wikipedia.org/wiki/PATH_%28variable%29) except for `%SYSTEMROOT%\System32` (e.g. **do not** put in `C:\Windows\System32`).
+Windows users can [download an .exe file](https://github.com/oleksis/picta-dl/releases/download/v2020.11.2.1/picta-dl.exe) and place it in any location on their [PATH](https://en.wikipedia.org/wiki/PATH_%28variable%29) except for `%SYSTEMROOT%\System32` (e.g. **do not** put in `C:\Windows\System32`).
 
 You can also use pip:
 
@@ -956,7 +956,7 @@ picta-dl is an open-source project manned by too few volunteers, so we'd rather 
 
 # DEVELOPER INSTRUCTIONS
 
-Most users do not need to build picta-dl and can [download the builds](https://github.com/oleksis/youtube-dl/releases/latest) or get them from their distribution.
+Most users do not need to build picta-dl and can [download the builds](https://github.com/oleksis/picta-dl/releases/latest) or get them from their distribution.
 
 To run picta-dl as a developer, you don't need to build anything either. Simply execute
 
