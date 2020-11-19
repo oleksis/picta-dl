@@ -4,20 +4,17 @@ from __future__ import unicode_literals
 from .picta import PictaIE, PictaChannelPlaylistIE, PictaUserPlaylistIE
 from .youtube import (
     YoutubeIE,
-    YoutubeChannelIE,
-    YoutubeFavouritesIE,
     YoutubeHistoryIE,
     YoutubeLiveIE,
+    YoutubeTabIE,
     YoutubePlaylistIE,
-    YoutubePlaylistsIE,
     YoutubeRecommendedIE,
     YoutubeSearchDateIE,
     YoutubeSearchIE,
-    YoutubeSearchURLIE,
-    YoutubeShowIE,
+    #YoutubeSearchURLIE,
     YoutubeSubscriptionsIE,
     YoutubeTruncatedIDIE,
     YoutubeTruncatedURLIE,
-    YoutubeUserIE,
+    YoutubeYtUserIE,
     YoutubeWatchLaterIE,
 )

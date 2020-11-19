@@ -1,3 +1,37 @@
+version 2020.11.19
+
+Core
+* [extractor/common] Output error for invalid URLs in _is_valid_url (#21400,
+  #24151, #25617, #25618, #25586, #26068, #27072)
+
+
+version 2020.11.18
+
+Extractors
+* [youtube] Improve extraction
+    + Add support for --no-playlist (#27009)
+    * Improve playlist and mix extraction (#26390, #26509, #26534, #27011)
+    + Extract playlist uploader data
+* [youtube:tab] Fix view count extraction (#27051)
+* [youtube:tab] Fix playlist title extraction (#27015)
+* [youtube] Fix chapters extraction (#26005)
+
+
+version 2020.11.17
+
+Core
+* [utils] Skip ! prefixed code in js_to_json
+
+Extractors
+* [youtube:tab] Fix extraction with cookies provided (#27005)
+
+
+version 2020.11.12
+
+Extractors
+* [youtube] Rework extractors
+
+
 version 2020.11.2.1
 
 Core
