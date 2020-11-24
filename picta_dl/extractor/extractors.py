@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from .picta import PictaIE, PictaChannelPlaylistIE, PictaUserPlaylistIE
 from .youtube import (
     YoutubeIE,
+    YoutubeFavouritesIE,
     YoutubeHistoryIE,
     YoutubeTabIE,
     YoutubePlaylistIE,

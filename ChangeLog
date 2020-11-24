@@ -1,3 +1,30 @@
+version 2020.11.24
+
+Core
++ [extractor/common] Add generic support for akamai HTTP format extraction
+
+Extractors
+* [youtube:tab] Fix feeds extraction (#25695, #26452)
+* [youtube:favorites] Restore extractor
+* [youtube:tab] Fix some weird typo (#27157)
+
+
+version 2020.11.21.1
+
+Core
+* [downloader/http] Fix crash during urlopen caused by missing reason
+  of URLError
+* [YoutubeDL] Fix --ignore-errors for playlists with generator-based entries
+  of url_transparent (#27064)
+
+Extractors
+* [youtube] Fix error reason extraction (#27081)
+* [youtube] Fix like and dislike count extraction (#25977)
++ [youtube:tab] Add support for current video and fix lives extraction (#27126)
+* [youtube] Improve yt initial data extraction (#27093)
+
+
+
 version 2020.11.19
 
 Core
