@@ -5,7 +5,6 @@ from .picta import PictaIE, PictaChannelPlaylistIE, PictaUserPlaylistIE
 from .youtube import (
     YoutubeIE,
     YoutubeHistoryIE,
-    YoutubeLiveIE,
     YoutubeTabIE,
     YoutubePlaylistIE,
     YoutubeRecommendedIE,
