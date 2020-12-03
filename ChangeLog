@@ -1,3 +1,20 @@
+version 2020.12.2
+
+Extractors
+* [youtube:tab] Extract channels only from channels tab (#27266)
+* [youtube] Improve age-gated videos extraction (#27259)
+
+
+version 2020.11.29
+
+Core
+* [YoutubeDL] Write static debug to stderr and respect quiet for dynamic debug
+  (#14579, #22593)
+
+Extractors
+* [youtube] Improve yt initial player response extraction (#27216)
+
+
 version 2020.11.26
 
 Core
