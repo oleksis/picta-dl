@@ -1,3 +1,24 @@
+version 2020.12.07
+
+Core
+* [extractor/common] Extract timestamp from Last-Modified header
++ [extractor/common] Add support for dl8-* media tags (#27283)
+* [extractor/common] Fix media type extraction for HTML5 media tags
+  in start/end form
+
+Extractors
+* [picta] Fix KeyError when extraction playlist
+* [youtube] Improve youtu.be extraction in non-existing playlists (#27324)
+
+
+version 2020.12.05
+
+Core
+* [extractor/common] Improve Akamai HTTP format extraction
+    * Allow m3u8 manifest without an additional audio format
+    * Fix extraction for qualities starting with a number
+
+
 version 2020.12.2
 
 Extractors
