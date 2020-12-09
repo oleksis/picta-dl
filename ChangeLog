@@ -1,3 +1,15 @@
+version <unreleaed>
+
+Core
+* [extractor/common] Fix inline HTML5 media tags processing (#27345)
+
+Extractors
+* [youtube:tab] Improve identity token extraction (#27197)
+* [youtube:tab] Make click tracking params on continuation optional
+* [youtube:tab] Delegate inline playlists to tab-based playlists (27298)
++ [youtube:tab] Capture and output alerts (#27340)
+
+
 version 2020.12.07
 
 Core
