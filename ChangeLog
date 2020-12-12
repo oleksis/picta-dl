@@ -1,4 +1,10 @@
-version <unreleaed>
+version 2020.12.12
+
+Core
+* [YoutubeDL] Improve thumbnail filename deducing (#26010, #27244)
+
+
+version 2020.12.9
 
 Core
 * [extractor/common] Fix inline HTML5 media tags processing (#27345)
