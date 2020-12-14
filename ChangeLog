@@ -1,3 +1,14 @@
+version 2020.12.14
+
+Core
+* [extractor/common] Improve JSON-LD interaction statistic extraction (#23306)
+* [downloader/hls] Delegate manifests with media initialization to ffmpeg
++ [extractor/common] Document duration meta field for playlists
+
+Extractors
++ [youtube] Add some invidious instances (#27373)
+
+
 version 2020.12.12
 
 Core
