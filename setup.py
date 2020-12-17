@@ -200,8 +200,29 @@ cmdclass = {"build_lazy_extractors": build_lazy_extractors}
 if make_executable:
     cmdclass.update(pyinstaller_cmd)
 
+
+
+APP_NAME = 'picta_dl'
+APP = ["./picta_dl/__main__.py"]
+OPTIONS = {
+    'argv_emulation': True,
+    'iconfile': './assets/picta-dl.icns',
+    'plist': {
+        'CFBundleName': APP_NAME,
+        'CFBundleDisplayName': APP_NAME,
+        'CFBundleGetInfoString': DESCRIPTION,
+        'CFBundleIdentifier': "com.github.oleksis.picta-dl",
+        'CFBundleVersion': __version__,
+        'CFBundleShortVersionString': __version__,
+        'NSHumanReadableCopyright': u"Copyright © 2020, Oleksis Fraga"
+    },
+}
+
 setup(
-    name="picta_dl",
+    app=APP,
+    name=APP_NAME,
+    options={'py2app': OPTIONS},
+    setup_requires=['py2app'],
     version=__version__,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
