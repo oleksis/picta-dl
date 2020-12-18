@@ -36,8 +36,12 @@ You can also use pip:
 This command will update picta-dl if you have already installed it. See the [pypi page](https://pypi.python.org/pypi/picta_dl) for more information.
 
 macOS users can install picta-dl with [Homebrew](https://brew.sh/):
+Add the custom repo 
 
-    brew install picta-dl
+    brew tap rsanjuan87/picta-dl
+and install picta--dl
+
+    brew install picta-dl 
 
 Or with [MacPorts](https://www.macports.org/):
 
