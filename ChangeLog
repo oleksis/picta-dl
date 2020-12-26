@@ -1,3 +1,12 @@
+version 2020.12.22
+
+Core
+* [common] Remove unwanted query params from unsigned akamai manifest URLs
+
+Extractors
+* [youtube] Improve xsrf token extraction (#27442)
+
+
 version 2020.12.14
 
 Core
