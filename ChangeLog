@@ -1,3 +1,19 @@
+version 2020.12.31
+
+Core
+* [utils] Accept only supported protocols in url_or_none
+* [YoutubeDL] Allow format filtering using audio language (#16209)
+
+
+version 2020.12.29
+
+Extractors
+* [youtube] Improve yt initial data extraction (#27524)
+* [youtube:tab] Improve URL matching #27559)
+* [youtube:tab] Restore retry on browse requests (#27313, #27564)
+* [youtube] Update invidious.snopyta.org (#22667)
+
+
 version 2020.12.26
 
 Extractors
