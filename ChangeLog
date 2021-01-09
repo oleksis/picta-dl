@@ -1,3 +1,10 @@
+version 2021.1.8
+
+Core
+* [downloader/hls] Disable decryption in tests (#27660)
++ [utils] Add a function to clean podcast URLs
+
+
 version 2021.1.4
 
 Extractors
