@@ -37,7 +37,7 @@ This command will update picta-dl if you have already installed it. See the [pyp
 
 macOS users can install picta-dl with [Homebrew](https://brew.sh/):
     
-    brew tap rsanjuan87/picta-dl
+    brew tap oleksis/picta-dl
     brew install picta-dl
 
 Or with [MacPorts](https://www.macports.org/):
