@@ -1,3 +1,17 @@
+version 2021.1.16
+
+Core
+* [YoutubeDL] Protect from infinite recursion due to recursively nested
+  playlists (#27833)
+* [YoutubeDL] Ignore failure to create existing directory (#27811)
+* [YoutubeDL] Raise syntax error for format selection expressions with multiple
+  + operators (#27803)
+
+Extractors
+* [youtube:search] Extract from all sections (#27604)
+* [youtube:search] fix viewcount and try to extract all video sections (#27604)
+
+
 version 2021.1.8
 
 Core
