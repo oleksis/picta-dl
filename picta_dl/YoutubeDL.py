@@ -163,6 +163,7 @@ class YoutubeDL(object):
     simulate:          Do not download the video files.
     format:            Video format code. See options.py for more information.
     outtmpl:           Template for output names.
+    outtmpl_na_placeholder: Placeholder for unavailable meta fields.
     restrictfilenames: Do not allow "&" and spaces in file names
     ignoreerrors:      Do not stop on download errors.
     force_generic_extractor: Force downloader to use the generic extractor
@@ -658,7 +659,7 @@ class YoutubeDL(object):
             template_dict = dict((k, v if isinstance(v, compat_numeric_types) else sanitize(k, v))
                                  for k, v in template_dict.items()
                                  if v is not None and not isinstance(v, (list, tuple, dict)))
-            template_dict = collections.defaultdict(lambda: 'NA', template_dict)
+            template_dict = collections.defaultdict(lambda: self.params.get('outtmpl_na_placeholder', 'NA'), template_dict)
 
             outtmpl = self.params.get('outtmpl', DEFAULT_OUTTMPL)
 
