@@ -20,7 +20,7 @@ picta-dl.tar.gz
 .coverage
 cover/
 updates_key.pem
-*.egg-info
+*.egg-info/
 *.srt
 *.ttml
 *.sbv
@@ -43,14 +43,22 @@ test/local_parameters.json
 picta-dl.zsh
 
 # IntelliJ related files
-.idea
+.idea/
 *.iml
 
 tmp/
 venv/
-.env
+.env/
+env/
 
 *.spec
 
 # VS Code related files
-.vscode
+.vscode/
+
+# Nuitka
+__main__.build/
+__main__.dist/
+__main__.exe
+__main__.onefile-build/
+libpython*.dll
