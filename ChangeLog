@@ -1,7 +1,8 @@
-version 2021.1.29.1
+version 2021.1.29.2
 
 Core
 * [__main__.py] Set environment variable LD_LIBRARY_PATH for GNU/Linux and *BSD.
++ Add picta-dl_x86 binary to release workflow
 
 
 version 2021.1.25
