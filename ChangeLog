@@ -1,4 +1,10 @@
-version 2021.01.25
+version 2021.1.29.1
+
+Core
+* [__main__.py] Set environment variable LD_LIBRARY_PATH for GNU/Linux and *BSD.
+
+
+version 2021.1.25
 
 Core
 * Introduce --output-na-placeholder (#27896)
