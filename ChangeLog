@@ -1,3 +1,35 @@
+version 2021.2.10
+
+Extractors
+* [youtube:tab] Improve grid continuation extraction (#28130)
++ [youtube] Add support phone/tablet JS player (#26424)
+* [youtube] Fix release date extraction (#28094)
++ [youtube] Extract abr and vbr (#28100)
+* [youtube] Skip OTF formats (#28070)
+
+
+version 2021.2.04.1
+
+Extractors
+* [youtube] Prefer DASH formats (#28070)
+
+
+version 2021.2.04
+
+Extractors
++ [youtube] Pass embed URL to get_video_info request
+* [youtube] Improve subtitles extraction
+* [youtube] Fix chapter extraction fallback
+* [youtube] Rewrite extractor
+    * Improve format sorting
+    * Remove unused code
+    * Fix series metadata extraction
+    * Fix trailer video extraction
+    * Improve error reporting
+    + Extract video location
+* [youtube] Improve DASH formats file size extraction
+
+
 version 2021.1.29.2
 
 Core
