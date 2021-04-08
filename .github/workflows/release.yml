@@ -63,7 +63,7 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl.exe
       id: sha2_file
-      run: echo "::set-output name=sha2_windows::$(Get-FileHash dist\picta-dl.exe -Algorithm SHA256).Hash.ToLower()"
+      run: echo "::set-output name=sha2_windows::$((Get-FileHash dist\picta-dl.exe -Algorithm SHA256).Hash.ToLower())"
   build_windows_32_exe:
     needs: build_windows_exe
     runs-on: windows-latest
@@ -94,7 +94,7 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl_x86.exe
       id: sha2_file_win32
-      run: echo "::set-output name=sha2_windows::$(Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower()"
+      run: echo "::set-output name=sha2_windows::$((Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower())"
   build_ubuntu_bdist:
     needs: [build_windows_exe, build_windows_32_exe]
     runs-on: ubuntu-latest
@@ -153,10 +153,10 @@ jobs:
         SHA2_UBUNTU_BINARY: ${{ steps.sha2_file_binary.outputs.sha2_ubuntu }}
         PICTA_VERSION: ${{ needs.build_windows_exe.outputs.picta_version }}
       run: |
-        echo "$SHA2_WINDOWS picta-dl.exe" > SHA2-256SUMS
-        echo "$SHA2_WINDOWS32 picta-dl_x86.exe" >> SHA2-256SUMS
-        echo "$SHA2_UBUNTU_BINARY picta-dl" >> SHA2-256SUMS
-        echo "$SHA2_UBUNTU_TARGZ picta_dl-$PICTA_VERSION.linux-x86_64.tar.gz" >> SHA2-256SUMS
+        echo "$SHA2_WINDOWS  picta-dl.exe" > SHA2-256SUMS
+        echo "$SHA2_WINDOWS32  picta-dl_x86.exe" >> SHA2-256SUMS
+        echo "$SHA2_UBUNTU_BINARY  picta-dl" >> SHA2-256SUMS
+        echo "$SHA2_UBUNTU_TARGZ  picta_dl-$PICTA_VERSION.linux-x86_64.tar.gz" >> SHA2-256SUMS
     - name: Upload SHA2-256SUMS to Release
       id: upload-release-sha2 
       uses: actions/upload-release-asset@v1
