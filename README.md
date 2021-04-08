@@ -19,15 +19,15 @@ picta-dl - Download videos from Picta.cu Plataforma de Contenidos Audiovisuales 
 
 To install it right away for all UNIX users (Linux, macOS, etc.), type:
 
-    sudo curl -L https://github.com/oleksis/picta-dl/releases/download/v2021.2.10/picta-dl -o /usr/local/bin/picta-dl
+    sudo curl -L https://github.com/oleksis/picta-dl/releases/download/v2021.4.7/picta-dl -o /usr/local/bin/picta-dl
     sudo chmod a+rx /usr/local/bin/picta-dl
 
 If you do not have curl, you can alternatively use a recent wget:
 
-    sudo wget https://github.com/oleksis/picta-dl/releases/download/v2021.2.10/picta-dl -O /usr/local/bin/picta-dl
+    sudo wget https://github.com/oleksis/picta-dl/releases/download/v2021.4.7/picta-dl -O /usr/local/bin/picta-dl
     sudo chmod a+rx /usr/local/bin/picta-dl
 
-Windows users can [download an .exe file](https://github.com/oleksis/picta-dl/releases/download/v2021.2.10/picta-dl.exe) and place it in any location on their [PATH](https://en.wikipedia.org/wiki/PATH_%28variable%29) except for `%SYSTEMROOT%\System32` (e.g. **do not** put in `C:\Windows\System32`).
+Windows users can [download an .exe file](https://github.com/oleksis/picta-dl/releases/download/v2021.4.7/picta-dl.exe) and place it in any location on their [PATH](https://en.wikipedia.org/wiki/PATH_%28variable%29) except for `%SYSTEMROOT%\System32` (e.g. **do not** put in `C:\Windows\System32`).
 
 You can also use pip:
 
@@ -696,7 +696,7 @@ You can merge the video and audio of two formats into a single file using `-f <v
 
 Format selectors can also be grouped using parentheses, for example if you want to download the best mp4 and webm formats with a height lower than 480 you can use `-f '(mp4,webm)[height<480]'`.
 
-Since the end of April 2015 and version 2015.04.26, picta-dl uses `-f bestvideo+bestaudio/best` as the default format selection (see [#5447](https://github.com/ytdl-org/youtube-dl/issues/5447), [#5456](https://github.com/ytdl-org/youtube-dl/issues/5456)). If ffmpeg or avconv are installed this results in downloading `bestvideo` and `bestaudio` separately and muxing them together into a single file giving the best overall quality available. Otherwise it falls back to `best` and results in downloading the best available quality served as a single file. `best` is also needed for videos that don't come from YouTube because they don't provide the audio and video in two different files. If you want to only download some DASH formats (for example if you are not interested in getting videos with a resolution higher than 1080p), you can add `-f bestvideo[height<=?1080]+bestaudio/best` to your configuration file. Note that if you use picta-dl to stream to `stdout` (and most likely to pipe it to your media player then), i.e. you explicitly specify output template as `-o -`, picta-dl still uses `-f best` format selection in order to start content delivery immediately to your player and not to wait until `bestvideo` and `bestaudio` are downloaded and muxed.
+Since the end of April 2015 and version 2015.04.26, picta-dl uses `-f bestvideo+bestaudio/best` as the default format selection (see [#5447](https://github.com/oleksis/picta-dl/issues/5447), [#5456](https://github.com/oleksis/picta-dl/issues/5456)). If ffmpeg or avconv are installed this results in downloading `bestvideo` and `bestaudio` separately and muxing them together into a single file giving the best overall quality available. Otherwise it falls back to `best` and results in downloading the best available quality served as a single file. `best` is also needed for videos that don't come from YouTube because they don't provide the audio and video in two different files. If you want to only download some DASH formats (for example if you are not interested in getting videos with a resolution higher than 1080p), you can add `-f bestvideo[height<=?1080]+bestaudio/best` to your configuration file. Note that if you use picta-dl to stream to `stdout` (and most likely to pipe it to your media player then), i.e. you explicitly specify output template as `-o -`, picta-dl still uses `-f best` format selection in order to start content delivery immediately to your player and not to wait until `bestvideo` and `bestaudio` are downloaded and muxed.
 
 If you want to preserve the old format selection behavior (prior to youtube-dl 2015.04.26), i.e. you want to download the best available quality media served as a single file, you should explicitly specify your choice with `-f best`. You may want to add it to the [configuration file](#configuration) in order not to type it every time you run picta-dl.
 
@@ -791,7 +791,7 @@ Most people asking this question are not aware that picta-dl now defaults to dow
 
 ### I get HTTP error 402 when trying to download a video. What's this?
 
-Apparently YouTube requires you to pass a CAPTCHA test if you download too much. We're [considering to provide a way to let you solve the CAPTCHA](https://github.com/ytdl-org/youtube-dl/issues/154), but at the moment, your best course of action is pointing a web browser to the youtube URL, solving the CAPTCHA, and restart picta-dl.
+Apparently YouTube requires you to pass a CAPTCHA test if you download too much. We're [considering to provide a way to let you solve the CAPTCHA](https://github.com/oleksis/picta-dl/issues/154), but at the moment, your best course of action is pointing a web browser to the youtube URL, solving the CAPTCHA, and restart picta-dl.
 
 ### Do I need any other programs?
 
@@ -858,7 +858,7 @@ means you're using an outdated version of Python. Please update to Python 2.6 or
 
 ### What is this binary file? Where has the code gone?
 
-Since June 2012 ([#342](https://github.com/ytdl-org/youtube-dl/issues/342)) picta-dl is packed as an executable zipfile, simply unzip it (might need renaming to `picta-dl.zip` first on some systems) or clone the git repository, as laid out above. If you modify the code, you can run it by executing the `__main__.py` file. To recompile the executable, run `make picta-dl`.
+Since June 2012 ([#342](https://github.com/oleksis/picta-dl/issues/342)) picta-dl is packed as an executable zipfile, simply unzip it (might need renaming to `picta-dl.zip` first on some systems) or clone the git repository, as laid out above. If you modify the code, you can run it by executing the `__main__.py` file. To recompile the executable, run `make picta-dl`.
 
 ### The exe throws an error due to missing `MSVCR100.dll`
 
@@ -933,7 +933,7 @@ Support requests for services that **do** purchase the rights to distribute thei
 
 (Also known as: Help, my important issue not being solved!) The picta-dl core developer team is quite small. While we do our best to solve as many issues as possible, sometimes that can take quite a while. To speed up your issue, here's what you can do:
 
-First of all, please do report the issue [at our issue tracker](https://yt-dl.org/bugs). That allows us to coordinate all efforts by users and developers, and serves as a unified point. Unfortunately, the picta-dl project has grown too large to use personal email as an effective communication channel.
+First of all, please do report the issue [at our issue tracker](https://github.com/oleksis/picta-dl/issues). That allows us to coordinate all efforts by users and developers, and serves as a unified point. Unfortunately, the picta-dl project has grown too large to use personal email as an effective communication channel.
 
 Please read the [bug reporting instructions](#bugs) below. A lot of bugs lack all the necessary information. If you can, offer proxy, VPN, or shell access to the picta-dl developers. If you are able to, test the issue from multiple computers in multiple countries to exclude local censorship or misconfiguration issues.
 
@@ -1321,7 +1321,7 @@ view_count = int_or_none(video.get('views'))
 
 # EMBEDDING YOUTUBE-DL
 
-picta-dl makes the best effort to be a good command-line program, and thus should be callable from any programming language. If you encounter any problems parsing its output, feel free to [create a report](https://github.com/ytdl-org/youtube-dl/issues/new).
+picta-dl makes the best effort to be a good command-line program, and thus should be callable from any programming language. If you encounter any problems parsing its output, feel free to [create a report](https://github.com/oleksis/picta-dl/issues/new).
 
 From a Python program, you can embed picta-dl in a more powerful fashion, like this:
 
@@ -1375,7 +1375,7 @@ with picta_dl.YoutubeDL(ydl_opts) as ydl:
 
 # BUGS
 
-Bugs and suggestions should be reported at: <https://github.com/ytdl-org/youtube-dl/issues>. Unless you were prompted to or there is another pertinent reason (e.g. GitHub fails to accept the bug report), please do not send bug reports via personal email. For discussions, join us in the IRC channel [#youtube-dl](irc://chat.freenode.net/#youtube-dl) on freenode ([webchat](https://webchat.freenode.net/?randomnick=1&channels=youtube-dl)).
+Bugs and suggestions should be reported at: <https://github.com/oleksis/picta-dl/issues>. Unless you were prompted to or there is another pertinent reason (e.g. GitHub fails to accept the bug report), please do not send bug reports via personal email. For discussions, join us in the IRC channel [#youtube-dl](irc://chat.freenode.net/#youtube-dl) on freenode ([webchat](https://webchat.freenode.net/?randomnick=1&channels=youtube-dl)).
 
 **Please include the full output of picta-dl when run with `-v`**, i.e. **add** `-v` flag to **your command line**, copy the **whole** output and post it in the issue body wrapped in \`\`\` for better formatting. It should look similar to this:
 ```
@@ -1421,7 +1421,7 @@ Before reporting any issue, type `picta-dl -U`. This should report that you're u
 
 ###  Is the issue already documented?
 
-Make sure that someone has not already opened the issue you're trying to open. Search at the top of the window or browse the [GitHub Issues](https://github.com/ytdl-org/youtube-dl/search?type=Issues) of this repository. If there is an issue, feel free to write something along the lines of "This affects me as well, with version 2015.01.01. Here is some more information on the issue: ...". While some issues may be old, a new post into them often spurs rapid activity.
+Make sure that someone has not already opened the issue you're trying to open. Search at the top of the window or browse the [GitHub Issues](https://github.com/oleksis/picta-dl/search?type=Issues) of this repository. If there is an issue, feel free to write something along the lines of "This affects me as well, with version 2015.01.01. Here is some more information on the issue: ...". While some issues may be old, a new post into them often spurs rapid activity.
 
 ###  Why are existing options not enough?
 
