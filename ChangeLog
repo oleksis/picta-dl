@@ -1,3 +1,20 @@
+version 2021.4.17
+
+Core
++ [utils] Add support for experimental HTTP response status code
+  308 Permanent Redirect (#27877, #28768)
+
+Extractors
+* [youtube] Fix stretched ratio calculation
+* [youtube] Improve stretch extraction (#28769)
+* [youtube:tab] Improve grid extraction (#28725)
++ [youtube:tab] Detect series playlist on playlists page (#28723)
++ [youtube] Add more invidious instances (#28706)
+* [youtube] Improve URL to extractor routing (#27572, #28335, #28742)
++ [youtube:tab] Pass innertube context and x-goog-visitor-id header along with
+  continuation requests (#28702)
+
+
 version 2021.4.7
 
 Core
