@@ -62,3 +62,11 @@ __main__.dist/
 __main__.exe
 __main__.onefile-build/
 libpython*.dll
+
+# AppImage-Builder
+AppDir/
+appimage-builder-cache/
+get-pip.py
+*.AppImage*
+
+
