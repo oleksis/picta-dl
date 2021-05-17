@@ -4,12 +4,19 @@ from __future__ import unicode_literals
 from base64 import b64encode
 import re
 import math
+import sys
 
-from ..compat import (
+try:
+    import yt_dlp
+    #print("Imported yt_dlp", file=sys.stderr)
+except ImportError as e:
+    print(e, file=sys.stderr)
+
+from yt_dlp.compat import (
     compat_str,
     compat_HTTPError
 )
-from ..utils import (
+from yt_dlp.utils import (
     float_or_none,
     mimetype2ext,
     parse_duration,
@@ -20,7 +27,7 @@ from ..utils import (
     ExtractorError,
     base_url,
 )
-from .common import InfoExtractor
+from yt_dlp.extractor.common import InfoExtractor
 
 ROOT_BASE_URL = "https://www.picta.cu/"
 API_BASE_URL = "https://api.picta.cu/v2/"
