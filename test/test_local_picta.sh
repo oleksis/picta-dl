@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 
 # cd ..
+echo "*** MPD Formats ***"
+echo ""
 
 # Let Errors
 echo "No Exists, With Errors"
@@ -46,6 +48,10 @@ echo ""
 
 echo "Movie URL path"
 python picta_dl/__main__.py -s https://www.picta.cu/movie/phineas-ferb-pelicula-candace-universo-2020-08-28-21-00-32-857026
+echo ""
+
+echo "*** M3U8 Formats ***"
+python picta_dl/__main__.py -s https://www.picta.cu/medias/google-keynote-google-i-21-2021-05-18-11-44-57-167469
 echo ""
 
 echo "Run Test No Duplicates"
