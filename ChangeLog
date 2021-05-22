@@ -51,45 +51,45 @@ Extractors
 + [youtube:tab] Add support for hashtags (#28308)
 
 
-version 2021.04.01
+version 2021.4.01
 
 Extractors
 * [youtube] Setup CONSENT cookie when needed (#28604)
 * [youtube] Improve age-restricted video extraction (#28578)
 
 
-version 2021.03.31
+version 2021.3.31
 
 Extractors
 * [youtube] Fix video's channel extraction (#28562)
 * [youtube:tab] Fix playlist/community continuation items extraction (#28266)
 
 
-version 2021.03.25
+version 2021.3.25
 
 Extractors
 * [youtube] Fix default value for youtube_include_dash_manifest (#28523)
 
 
-version 2021.03.14
+version 2021.3.14
 
 Core
 + Introduce release_timestamp meta field (#28386)
 
 
-version 2021.03.03
+version 2021.3.3
 
 Extractors
 * [youtube:tab] Switch continuation to browse API (#28289, #28327)
 
 
-version 2021.03.02
+version 2021.3.2
 
 Extractors
 * [youtube] Fix get_video_info request
 
 
-version 2021.02.22
+version 2021.2.22
 
 Core
 + [postprocessor/embedthumbnail] Recognize atomicparsley binary in lowercase
@@ -113,13 +113,13 @@ Extractors
 * [youtube] Skip OTF formats (#28070)
 
 
-version 2021.2.04.1
+version 2021.2.4.1
 
 Extractors
 * [youtube] Prefer DASH formats (#28070)
 
 
-version 2021.2.04
+version 2021.2.4
 
 Extractors
 + [youtube] Pass embed URL to get_video_info request
