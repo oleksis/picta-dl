@@ -48,6 +48,7 @@ picta-dl.zsh
 
 tmp/
 venv/
+.venv/
 .env/
 env/
 
@@ -69,4 +70,5 @@ appimage-builder-cache/
 get-pip.py
 *.AppImage*
 
-
+# Netscape HTTP Cookie File
+cookies.txt

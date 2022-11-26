@@ -1,21 +1,19 @@
-#!/usr/bin/env python
-from __future__ import unicode_literals
+#!/usr/bin/env python3
 
 # Allow direct execution
 import os
 import sys
 import unittest
+
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from test.helper import FakeYDL
+
+from test.helper import FakeYDL, is_download_test
+from yt_dlp.extractor import YoutubeIE, YoutubeTabIE
+from yt_dlp.utils import ExtractorError
 
 
-from picta_dl.extractor import (
-    YoutubePlaylistIE,
-    YoutubeIE,
-)
-
-
+@is_download_test
 class TestYoutubeLists(unittest.TestCase):
     def assertIsPlaylist(self, info):
         """Make sure the info has '_type' set to 'playlist'"""
@@ -24,47 +22,49 @@ class TestYoutubeLists(unittest.TestCase):
     def test_youtube_playlist_noplaylist(self):
         dl = FakeYDL()
         dl.params['noplaylist'] = True
-        ie = YoutubePlaylistIE(dl)
-        result = ie.extract('https://www.youtube.com/watch?v=FXxLjLQi3Fg&list=PLwiyx1dc3P2JR9N8gQaQN_BCvlSlap7re')
+        ie = YoutubeTabIE(dl)
+        result = ie.extract('https://www.youtube.com/watch?v=OmJ-4B-mS-Y&list=PLydZ2Hrp_gPRJViZjLFKaBMgCQOYEEkyp&index=2')
         self.assertEqual(result['_type'], 'url')
-        self.assertEqual(YoutubeIE().extract_id(result['url']), 'FXxLjLQi3Fg')
-
-    def test_youtube_course(self):
-        dl = FakeYDL()
-        ie = YoutubePlaylistIE(dl)
-        # TODO find a > 100 (paginating?) videos course
-        result = ie.extract('https://www.youtube.com/course?list=ECUl4u3cNGP61MdtwGTqZA0MreSaDybji8')
-        entries = list(result['entries'])
-        self.assertEqual(YoutubeIE().extract_id(entries[0]['url']), 'j9WZyLZCBzs')
-        self.assertEqual(len(entries), 25)
-        self.assertEqual(YoutubeIE().extract_id(entries[-1]['url']), 'rYefUsYuEp0')
+        self.assertEqual(result['ie_key'], YoutubeIE.ie_key())
+        self.assertEqual(YoutubeIE.extract_id(result['url']), 'OmJ-4B-mS-Y')
 
     def test_youtube_mix(self):
         dl = FakeYDL()
-        ie = YoutubePlaylistIE(dl)
-        result = ie.extract('https://www.youtube.com/watch?v=W01L70IGBgE&index=2&list=RDOQpdSVF_k_w')
-        entries = result['entries']
+        ie = YoutubeTabIE(dl)
+        result = ie.extract('https://www.youtube.com/watch?v=tyITL_exICo&list=RDCLAK5uy_kLWIr9gv1XLlPbaDS965-Db4TrBoUTxQ8')
+        entries = list(result['entries'])
         self.assertTrue(len(entries) >= 50)
         original_video = entries[0]
-        self.assertEqual(original_video['id'], 'OQpdSVF_k_w')
+        self.assertEqual(original_video['id'], 'tyITL_exICo')
 
-    def test_youtube_toptracks(self):
-        print('Skipping: The playlist page gives error 500')
-        return
-        dl = FakeYDL()
-        ie = YoutubePlaylistIE(dl)
-        result = ie.extract('https://www.youtube.com/playlist?list=MCUS')
-        entries = result['entries']
-        self.assertEqual(len(entries), 100)
-
-    def test_youtube_flat_playlist_titles(self):
+    def test_youtube_flat_playlist_extraction(self):
         dl = FakeYDL()
         dl.params['extract_flat'] = True
-        ie = YoutubePlaylistIE(dl)
-        result = ie.extract('https://www.youtube.com/playlist?list=PL-KKIb8rvtMSrAO9YFbeM6UQrAqoFTUWv')
+        ie = YoutubeTabIE(dl)
+        result = ie.extract('https://www.youtube.com/playlist?list=PL4lCao7KL_QFVb7Iudeipvc2BCavECqzc')
         self.assertIsPlaylist(result)
-        for entry in result['entries']:
-            self.assertTrue(entry.get('title'))
+        entries = list(result['entries'])
+        self.assertTrue(len(entries) == 1)
+        video = entries[0]
+        self.assertEqual(video['_type'], 'url')
+        self.assertEqual(video['ie_key'], 'Youtube')
+        self.assertEqual(video['id'], 'BaW_jenozKc')
+        self.assertEqual(video['url'], 'https://www.youtube.com/watch?v=BaW_jenozKc')
+        self.assertEqual(video['title'], 'youtube-dl test video "\'/\\ä↭𝕐')
+        self.assertEqual(video['duration'], 10)
+        self.assertEqual(video['uploader'], 'Philipp Hagemeister')
+
+    def test_youtube_channel_no_uploads(self):
+        dl = FakeYDL()
+        dl.params['extract_flat'] = True
+        ie = YoutubeTabIE(dl)
+        # no uploads
+        with self.assertRaisesRegex(ExtractorError, r'no uploads'):
+            ie.extract('https://www.youtube.com/channel/UC2yXPzFejc422buOIzn_0CA')
+
+        # no uploads and no UCID given
+        with self.assertRaisesRegex(ExtractorError, r'no uploads'):
+            ie.extract('https://www.youtube.com/news')
 
 
 if __name__ == '__main__':

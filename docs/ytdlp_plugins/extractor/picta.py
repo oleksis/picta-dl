@@ -1,6 +1,3 @@
-# coding: utf-8
-from __future__ import unicode_literals
-
 from base64 import b64encode
 import re
 import math
@@ -8,7 +5,6 @@ import sys
 
 try:
     import yt_dlp
-
     # print("Imported yt_dlp", file=sys.stderr)
 except ImportError as e:
     print(e, file=sys.stderr)

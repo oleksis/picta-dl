@@ -1,0 +1,8 @@
+-c requirements.txt
+black
+isort
+flake8
+pytest
+pre-commit
+tox
+pyupgrade

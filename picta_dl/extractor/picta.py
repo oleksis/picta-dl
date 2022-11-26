@@ -1,6 +1,3 @@
-# coding: utf-8
-from __future__ import unicode_literals
-
 from base64 import b64encode
 import re
 import math
@@ -687,7 +684,6 @@ class PictaIE(PictaBaseIE):
         if not formats:
             raise ExtractorError("Cannot find video formats")
 
-        self._sort_formats(formats)
         info["formats"] = formats
 
         # subtitles
