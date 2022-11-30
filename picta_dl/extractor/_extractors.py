@@ -28,5 +28,11 @@ from .commonprotocols import (
     RtmpIE,
     ViewSourceIE,
 )
+from .facebook import (
+    FacebookIE,
+    FacebookPluginsVideoIE,
+    FacebookRedirectURLIE,
+    FacebookReelIE,
+)
 from .generic import GenericIE
 from .picta import PictaIE, PictaChannelPlaylistIE, PictaUserPlaylistIE

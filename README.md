@@ -19,15 +19,15 @@ picta-dl - Download videos from Picta.cu Plataforma de Contenidos Audiovisuales 
 
 To install it right away for all UNIX users (Linux, macOS, etc.), type:
 
-    sudo curl -L https://github.com/oleksis/picta-dl/releases/download/v2021.5.21.1/picta-dl -o /usr/local/bin/picta-dl
+    sudo curl -L https://github.com/oleksis/picta-dl/releases/download/v2022.11.29/picta-dl -o /usr/local/bin/picta-dl
     sudo chmod a+rx /usr/local/bin/picta-dl
 
 If you do not have curl, you can alternatively use a recent wget:
 
-    sudo wget https://github.com/oleksis/picta-dl/releases/download/v2021.5.21.1/picta-dl -O /usr/local/bin/picta-dl
+    sudo wget https://github.com/oleksis/picta-dl/releases/download/v2022.11.29/picta-dl -O /usr/local/bin/picta-dl
     sudo chmod a+rx /usr/local/bin/picta-dl
 
-Windows users can [download an .exe file](https://github.com/oleksis/picta-dl/releases/download/v2021.5.21.1/picta-dl.exe) and place it in any location on their [PATH](https://en.wikipedia.org/wiki/PATH_%28variable%29) except for `%SYSTEMROOT%\System32` (e.g. **do not** put in `C:\Windows\System32`).
+Windows users can [download an .exe file](https://github.com/oleksis/picta-dl/releases/download/v2022.11.29/picta-dl.exe) and place it in any location on their [PATH](https://en.wikipedia.org/wiki/PATH_%28variable%29) except for `%SYSTEMROOT%\System32` (e.g. **do not** put in `C:\Windows\System32`).
 
 You can also use pip:
 

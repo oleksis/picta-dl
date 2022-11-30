@@ -284,9 +284,9 @@ class PictaIE(PictaBaseIE):
 
             def extract_Initialization(source):
                 initialization = source.find(_add_ns("Initialization"))
-                # TODO: Fix Initialization sourceURL
+                # TODO: Different Initialization sourceURL. See docs/manifests/*.mpd
                 if initialization is not None:
-                    ms_info["initialization_url"] = initialization.get("sourceURL")
+                    ms_info["initialization_url"] = initialization.attrib['range']
 
             segment_list = element.find(_add_ns("SegmentList"))
             if segment_list is not None:
@@ -294,11 +294,12 @@ class PictaIE(PictaBaseIE):
                 extract_Initialization(segment_list)
                 segment_urls_e = segment_list.findall(_add_ns("SegmentURL"))
                 if segment_urls_e:
-                    # TODO: Fix SegmentURL media
+                    # TODO: Different SegmentURL media / mediaRange
+                    # Picta dont use fragments
                     segment_urls = [
-                        segment.get("media")
+                        segment.attrib.get("media")
                         for segment in segment_urls_e
-                        if segment.get("media") is not None
+                        if segment.attrib.get("media") is not None
                     ]
                     if segment_urls:
                         ms_info["segment_urls"] = segment_urls

@@ -11,7 +11,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import collections
 
 from test.helper import gettestcases
-from yt_dlp.extractor import FacebookIE, YoutubeIE, gen_extractors
+from picta_dl.extractor import FacebookIE, YoutubeIE, gen_extractors
 
 
 class TestAllURLsMatching(unittest.TestCase):
