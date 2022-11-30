@@ -36,4 +36,6 @@ jobs:
       env:
         USER: ${{ secrets.USER }}
         PASSWORD: ${{ secrets.PASSWORD }}
-      run: USER=$USER PASSWORD=$PASSWORD ./test/test_local_picta.sh
+      run: |
+        chmod +x ./test/test_local_picta.sh
+        USER=$USER PASSWORD=$PASSWORD ./test/test_local_picta.sh
