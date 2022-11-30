@@ -30,6 +30,7 @@ jobs:
       shell: python
       run: |
         import json
+        import os
         import re
         
         exec(compile(open('picta_dl/version.py').read(), 'picta_dl/version.py', 'exec'))
@@ -193,7 +194,11 @@ jobs:
       with:
         path: dist/*
   pypi_publish:
-    needs: [build_wheels]
+    needs:
+      - build_windows_exe
+      - build_windows_32_exe
+      - build_ubuntu_bdist
+      - build_wheels
     runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v3
