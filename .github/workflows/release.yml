@@ -13,16 +13,16 @@ jobs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
       sha2_windows: ${{ steps.sha2_file.outputs.sha2_windows }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
           python-version: '3.8'
           architecture: 'x64'
     - name: Upgrade pip and enable wheel support
       run: python -m pip install --upgrade pip setuptools wheel
     - name: Install Requirements
-      run: pip install -r requirements.txt
+      run: python -m pip install -U pyinstaller -r requirements/requirements.txt
     - name: Build PyInstaller
       run: python setup.py pyinstaller
     - name: Dump version and release body
@@ -33,15 +33,17 @@ jobs:
         import re
         
         exec(compile(open('picta_dl/version.py').read(), 'picta_dl/version.py', 'exec'))
-        print('::set-output name=picta_version::' + __version__)
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+            print(f'picta_version={__version__}', file=fh)
         
         with open('ChangeLog', encoding='utf-8') as inf:
             changelog = inf.read()
             
         mobj = re.search(r'(?s)version %s\n{2}(.+?)\n{3}' % __version__, changelog)
         body = mobj.group(1) if mobj else ''
-        body = json.dumps(body).encode('utf-8').decode('utf-8')
-        print('::set-output name=picta_changelog::' + body)
+        body = json.dumps(body)
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+            print(f'picta_changelog={body}', file=fh)
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
@@ -65,23 +67,23 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl.exe
       id: sha2_file
-      run: echo "::set-output name=sha2_windows::$((Get-FileHash dist\picta-dl.exe -Algorithm SHA256).Hash.ToLower())"
+      run: echo "sha2_windows=$((Get-FileHash dist\picta-dl.exe -Algorithm SHA256).Hash.ToLower())" >> "$GITHUB_OUTPUT"
   build_windows_32_exe:
     needs: build_windows_exe
     runs-on: windows-latest
     outputs:
       sha2_windows32: ${{ steps.sha2_file_win32.outputs.sha2_windows }}
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.4.4 32-Bit
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v3
+    - name: Set up Python 3.7 32-Bit
+      uses: actions/setup-python@v4
       with:
-          python-version: '3.4.4'
+          python-version: '3.7'
           architecture: 'x86'
-    - name: Upgrade pip and enable wheel support
-      run: python -m pip install pip==19.1.1 setuptools==43.0.0 wheel==0.33.6
-    - name: Install Requirements for 32 Bit
-      run: pip install pyinstaller==3.5 pefile==2019.4.18
+    - name: Install Requirements
+      run: |
+          python -m pip install -U pip setuptools wheel
+          python -m pip install -U "https://yt-dlp.github.io/Pyinstaller-Builds/i686/pyinstaller-5.3-py3-none-any.whl" -r requirements/requirements.txt
     - name: Build PyInstaller
       run: python setup.py pyinstaller
     - name: Rename picta-dl.exe to picta-dl_x86.exe
@@ -98,21 +100,21 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl_x86.exe
       id: sha2_file_win32
-      run: echo "::set-output name=sha2_windows::$((Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower())"
+      run: echo "sha2_windows=$((Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower())" >> "$GITHUB_OUTPUT"
   build_ubuntu_bdist:
     needs: [build_windows_exe, build_windows_32_exe]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
           python-version: '3.8'
           architecture: 'x64'
     - name: Upgrade pip and enable wheel support
       run: python -m pip install --upgrade pip setuptools wheel
     - name: Install Requirements
-      run: pip install -r requirements.txt
+      run: python -m pip install -r requirements/requirements.txt
     - name: Install packages Ubuntu for ManPages
       run: sudo apt-get -y install zip pandoc man
     - name: Run Make
@@ -129,8 +131,8 @@ jobs:
         asset_path: ./dist/picta_dl-${{ needs.build_windows_exe.outputs.picta_version }}.linux-x86_64.tar.gz
         asset_name: picta_dl-${{ needs.build_windows_exe.outputs.picta_version }}.linux-x86_64.tar.gz
         asset_content_type: application/octet-stream
-    - name: Build Binary using PyInstaller ManyLinux 2014 Docker Action
-      uses: oleksis/pyinstaller-manylinux@v1
+    - name: Build Binary using PyInstaller ManyLinux 2.28 Docker Action
+      uses: oleksis/pyinstaller-manylinux@v2.2.1
       with:
         pyinstaller-params: "['-c', '-F', '--icon=assets/picta-dl.ico', '--exclude-module=test', '--name=picta-dl', 'picta_dl/__main__.py']"
     - name: Upload Binary Distribution to Release
@@ -147,10 +149,10 @@ jobs:
       id: sha2_file_targz
       env:
         SHA2: ${{ hashFiles('dist/*.tar.gz') }}
-      run: echo "::set-output name=sha2_ubuntu::$SHA2"
+      run: echo "sha2_ubuntu=$SHA2" >> "$GITHUB_OUTPUT"
     - name: Get SHA2-256SUMS for picta-dl
       id: sha2_file_binary
-      run: echo "::set-output name=sha2_ubuntu::$(sha256sum dist/picta-dl | awk '{print $1}')"
+      run: echo "sha2_ubuntu=$(sha256sum dist/picta-dl | awk '{print $1}')" >> "$GITHUB_OUTPUT"
     - name: Make SHA2-256SUMS file
       env:
         SHA2_WINDOWS: ${{ needs.build_windows_exe.outputs.sha2_windows }}
@@ -173,24 +175,22 @@ jobs:
         asset_path: ./SHA2-256SUMS
         asset_name: SHA2-256SUMS
         asset_content_type: text/plain
-  make_sdist:
+  make_sdist: # https://scikit-hep.org/developer/gha_wheels
     name: Make SDist
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
           python-version: '3.8'
           architecture: 'x64'
-    - name: Install deps
-      run: python -m pip install "setuptools>=42"
-    - name: Build Sdist
-      run: python setup.py sdist
-    - uses: actions/upload-artifact@v2
+    - name: Build SDist
+      run: pipx run build --sdist
+    - uses: actions/upload-artifact@v3
       with:
         path: dist/*.tar.gz
-  build_wheels:  # https://scikit-hep.org/developer/gha_wheels
+  build_wheels:
     name: Wheel on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
@@ -198,34 +198,26 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
           python-version: '3.8'
           architecture: 'x64'
-    - name: Upgrade pip and enable wheel support
-      run: python -m pip install --upgrade pip setuptools wheel
-    - name: Install cibuildwheel 1.4.2
-      run: python -m pip install cibuildwheel==1.4.2
-    - name: Build wheel
-      run: python -m cibuildwheel --output-dir wheelhouse
-      env:
-        CIBW_SKIP: pp* cp27-win* cp35-win*
+    - uses: pypa/cibuildwheel@v2.11.2
     - name: Upload wheels
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         path: wheelhouse/*.whl
   pypi_publish:
     needs: [build_wheels, make_sdist]
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
       with:
         name: artifact
         path: dist
-
-    - uses: pypa/gh-action-pypi-publish@v1.2.2
+    - uses: pypa/gh-action-pypi-publish@release/v1
       with:
         user: __token__
         password: ${{ secrets.PYPI_PASSWORD }}

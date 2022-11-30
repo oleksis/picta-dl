@@ -7,7 +7,7 @@ from __future__ import unicode_literals
 
 import os, sys
 
-if __package__ is None and not hasattr(sys, 'frozen'):
+if not __package__ and not hasattr(sys, 'frozen'):
     # direct call of __main__.py
     path = os.path.realpath(os.path.abspath(__file__))
     sys.path.insert(0, os.path.dirname(os.path.dirname(path)))

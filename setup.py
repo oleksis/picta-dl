@@ -1,12 +1,7 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-from __future__ import print_function
-
 import os.path
 import warnings
+import subprocess
 import sys
-import time
 
 try:
     from setuptools import setup, Command
@@ -16,7 +11,10 @@ except ImportError:
     from distutils.core import setup, Command
 
     setuptools_available = False
-from distutils.spawn import spawn
+
+def read_file(fname):
+    with open(fname, encoding='utf-8') as f:
+        return f.read()
 
 # Get the version from picta_dl/version.py without importing the package
 exec(compile(open("picta_dl/version.py").read(), "picta_dl/version.py", "exec"))
@@ -24,6 +22,8 @@ exec(compile(open("picta_dl/version.py").read(), "picta_dl/version.py", "exec"))
 DESCRIPTION = "Picta video downloader"
 LONG_DESCRIPTION = ("Command-line program to download videos from Picta.cu "
                     "Plataforma de Contenidos Audiovisuales and YouTube.com")
+
+REQUIREMENTS = read_file("requirements/requirements.txt").splitlines()
 
 try:
     # This will create an exe that needs Microsoft Visual C++ 2008
@@ -109,7 +109,7 @@ class BuildPyinstallerBin(Command):
         pass
 
     def run(self, version=version_file):
-        spawn(
+        subprocess.run(
             [
                 "pyinstaller",
                 "-c",
@@ -119,14 +119,13 @@ class BuildPyinstallerBin(Command):
                 "--name=picta-dl",
                 "picta_dl/__main__.py",
             ],
-            dry_run=self.dry_run,
         )
+
         if version:
-            time.sleep(3)
             SetVersion("./dist/picta-dl.exe", version)
 
 
-pyinstaller_cmd = dict()
+pyinstaller_cmd = {}
 pyinstaller_console = [
     {
         "script": "./picta_dl/__main__.py",
@@ -142,7 +141,7 @@ pyinstaller_console = [
 if len(sys.argv) >= 2 and sys.argv[1] == "pyinstaller":
     make_executable = True
     pyinstaller_cmd.update({"pyinstaller": BuildPyinstallerBin})
-    params = dict()
+    params = {}
 else:
     make_executable = False
     files_spec = [
@@ -171,7 +170,7 @@ else:
     if setuptools_available:
         params["entry_points"] = {"console_scripts": ["picta-dl = picta_dl:main"]}
     else:
-        params["scripts"] = ["bin/picta-dl"]
+        params["scripts"] = ["picta-dl"]
 
 
 class build_lazy_extractors(Command):
@@ -185,13 +184,12 @@ class build_lazy_extractors(Command):
         pass
 
     def run(self):
-        spawn(
+        subprocess.run(
             [
                 sys.executable,
                 "devscripts/make_lazy_extractors.py",
                 "picta_dl/extractor/lazy_extractors.py",
-            ],
-            dry_run=self.dry_run,
+            ]
         )
 
 
@@ -201,46 +199,42 @@ if make_executable:
     cmdclass.update(pyinstaller_cmd)
 
 setup(
-    name="picta_dl",
+    name="picta-dl",
     version=__version__,
     description=DESCRIPTION,
     long_description=LONG_DESCRIPTION,
+    long_description_content_type="text/markdown",
     url="https://github.com/oleksis/picta-dl",
-    author="Ricardo Garcia",
-    author_email="ytdl@yt-dl.org",
     maintainer="Oleksis Fraga",
     maintainer_email="oleksis.fraga@gmail.com",
-    license="Unlicense",
     packages=[
         "picta_dl",
         "picta_dl.extractor",
         "picta_dl.downloader",
         "picta_dl.postprocessor",
+        "picta_dl.compat",
     ],
-    # Provokes warning on most systems (why?!)
-    # test_suite = 'nose.collector',
-    # test_requires = ['nosetest'],
+    install_requires=REQUIREMENTS,
+    python_requires=">=3.7",
+    project_urls={
+        "Documentation": 'https://github.com/oleksis/picta-dl#readme',
+        "Source": "https://github.com/oleksis/picta-dl",
+        "Tracker": "https://github.com/oleksis/picta-dl/issues",
+    },
     classifiers=[
         "Topic :: Multimedia :: Video",
         "Development Status :: 5 - Production/Stable",
         "Environment :: Console",
         "License :: Public Domain",
+        "Operating System :: OS Independent",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.2",
-        "Programming Language :: Python :: 3.3",
-        "Programming Language :: Python :: 3.4",
-        "Programming Language :: Python :: 3.5",
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: Implementation",
         "Programming Language :: Python :: Implementation :: CPython",
-        "Programming Language :: Python :: Implementation :: IronPython",
-        "Programming Language :: Python :: Implementation :: Jython",
         "Programming Language :: Python :: Implementation :: PyPy",
     ],
     cmdclass=cmdclass,
