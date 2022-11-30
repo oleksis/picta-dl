@@ -68,7 +68,7 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl.exe
       id: sha2_file
-      run: echo "sha2_windows=$((Get-FileHash dist\picta-dl.exe -Algorithm SHA256).Hash.ToLower())" >> "$GITHUB_OUTPUT"
+      run: echo "sha2_windows=$((Get-FileHash dist\picta-dl.exe -Algorithm SHA256).Hash.ToLower())" >> $GITHUB_OUTPUT
   build_windows_32_exe:
     needs: build_windows_exe
     runs-on: windows-latest
@@ -101,7 +101,7 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl_x86.exe
       id: sha2_file_win32
-      run: echo "sha2_windows=$((Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower())" >> "$GITHUB_OUTPUT"
+      run: echo "sha2_windows=$((Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower())" >> $GITHUB_OUTPUT
   build_manylinux:
     needs: [build_windows_exe, build_windows_32_exe]
     runs-on: ubuntu-latest
@@ -128,7 +128,7 @@ jobs:
         asset_content_type: application/octet-stream
     - name: Get SHA2-256SUMS for picta-dl
       id: sha2_file_binary
-      run: echo "sha2_ubuntu=$(sha256sum dist/picta-dl | awk '{print $1}')" >> "$GITHUB_OUTPUT"
+      run: echo "sha2_ubuntu=$(sha256sum dist/picta-dl | awk '{print $1}')" >> $GITHUB_OUTPUT
     - name: Make SHA2-256SUMS file
       env:
         SHA2_WINDOWS: ${{ needs.build_windows_exe.outputs.sha2_windows }}
