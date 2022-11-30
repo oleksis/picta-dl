@@ -175,8 +175,8 @@ jobs:
         asset_path: ./SHA2-256SUMS
         asset_name: SHA2-256SUMS
         asset_content_type: text/plain
-  make_sdist: # https://scikit-hep.org/developer/gha_wheels
-    name: Make SDist
+  build_wheels:
+    name: SDist and Wheel
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
@@ -185,32 +185,15 @@ jobs:
       with:
           python-version: '3.8'
           architecture: 'x64'
-    - name: Build SDist
-      run: pipx run build --sdist
+    - name: Install dependencies and create wheel
+      run: |
+        python -m pip install build
+        python -m build --sdist --wheel --outdir dist/ .
     - uses: actions/upload-artifact@v3
       with:
-        path: dist/*.tar.gz
-  build_wheels:
-    name: Wheel on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest]
-    steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v4
-      with:
-          python-version: '3.8'
-          architecture: 'x64'
-    - uses: pypa/cibuildwheel@v2.11.2
-    - name: Upload wheels
-      uses: actions/upload-artifact@v3
-      with:
-        path: wheelhouse/*.whl
+        path: dist/*
   pypi_publish:
-    needs: [build_wheels, make_sdist]
+    needs: [build_wheels]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/download-artifact@v3
