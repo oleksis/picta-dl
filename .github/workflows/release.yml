@@ -102,7 +102,7 @@ jobs:
     - name: Get SHA2-256SUMS for picta-dl_x86.exe
       id: sha2_file_win32
       run: echo "sha2_windows=$((Get-FileHash dist\picta-dl_x86.exe -Algorithm SHA256).Hash.ToLower())" >> "$GITHUB_OUTPUT"
-  build_ubuntu_bdist:
+  build_manylinux:
     needs: [build_windows_exe, build_windows_32_exe]
     runs-on: ubuntu-latest
     steps:
@@ -112,26 +112,6 @@ jobs:
       with:
           python-version: '3.8'
           architecture: 'x64'
-    - name: Upgrade pip and enable wheel support
-      run: python -m pip install --upgrade pip setuptools wheel
-    - name: Install Requirements
-      run: python -m pip install -r requirements/requirements.txt
-    - name: Install packages Ubuntu for ManPages
-      run: sudo apt-get -y install zip pandoc man
-    - name: Run Make
-      run: make
-    - name: Build Binary Distribution
-      run: python setup.py bdist
-    - name: Upload Tar-Gz Distribution to Release
-      id: upload-release-targz 
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ needs.build_windows_exe.outputs.upload_url }}
-        asset_path: ./dist/picta_dl-${{ needs.build_windows_exe.outputs.picta_version }}.linux-x86_64.tar.gz
-        asset_name: picta_dl-${{ needs.build_windows_exe.outputs.picta_version }}.linux-x86_64.tar.gz
-        asset_content_type: application/octet-stream
     - name: Build Binary using PyInstaller ManyLinux 2.28 Docker Action
       uses: oleksis/pyinstaller-manylinux@v2.2.1
       with:
@@ -146,11 +126,6 @@ jobs:
         asset_path: ./dist/picta-dl
         asset_name: picta-dl
         asset_content_type: application/octet-stream
-    - name: Get SHA2-256SUMS for picta_dl*.tar.gz
-      id: sha2_file_targz
-      env:
-        SHA2: ${{ hashFiles('dist/*.tar.gz') }}
-      run: echo "sha2_ubuntu=$SHA2" >> "$GITHUB_OUTPUT"
     - name: Get SHA2-256SUMS for picta-dl
       id: sha2_file_binary
       run: echo "sha2_ubuntu=$(sha256sum dist/picta-dl | awk '{print $1}')" >> "$GITHUB_OUTPUT"
@@ -158,14 +133,12 @@ jobs:
       env:
         SHA2_WINDOWS: ${{ needs.build_windows_exe.outputs.sha2_windows }}
         SHA2_WINDOWS32: ${{ needs.build_windows_32_exe.outputs.sha2_windows32 }}
-        SHA2_UBUNTU_TARGZ: ${{ steps.sha2_file_targz.outputs.sha2_ubuntu }}
         SHA2_UBUNTU_BINARY: ${{ steps.sha2_file_binary.outputs.sha2_ubuntu }}
         PICTA_VERSION: ${{ needs.build_windows_exe.outputs.picta_version }}
       run: |
         echo "$SHA2_WINDOWS  picta-dl.exe" > SHA2-256SUMS
         echo "$SHA2_WINDOWS32  picta-dl_x86.exe" >> SHA2-256SUMS
         echo "$SHA2_UBUNTU_BINARY  picta-dl" >> SHA2-256SUMS
-        echo "$SHA2_UBUNTU_TARGZ  picta_dl-$PICTA_VERSION.linux-x86_64.tar.gz" >> SHA2-256SUMS
     - name: Upload SHA2-256SUMS to Release
       id: upload-release-sha2 
       uses: actions/upload-release-asset@v1
@@ -186,9 +159,16 @@ jobs:
       with:
           python-version: '3.8'
           architecture: 'x64'
-    - name: Install dependencies and create wheel
+    - name: Upgrade pip and enable wheel support
+      run: python -m pip install --upgrade pip setuptools wheel build
+    - name: Install Requirements
+      run: python -m pip install -r requirements/requirements.txt
+    - name: Install packages Ubuntu for ManPages
+      run: sudo apt-get -y install zip pandoc man
+    - name: Run Make
+      run: make
+    - name: Create wheel
       run: |
-        python -m pip install build
         python -m build --sdist --wheel --outdir dist/ .
     - uses: actions/upload-artifact@v3
       with:
@@ -197,7 +177,7 @@ jobs:
     needs:
       - build_windows_exe
       - build_windows_32_exe
-      - build_ubuntu_bdist
+      - build_manylinux
       - build_wheels
     runs-on: ubuntu-latest
     steps:
