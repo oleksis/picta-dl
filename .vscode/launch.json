@@ -11,8 +11,8 @@
             "envFile": "${workspaceFolder}/.env",
             "program": "${workspaceFolder}/picta_dl/__main__.py",
             "args": ["-s",
-                "--username", "user",
-                "--password", "password",
+                "--username", "${env:USER}",
+                "--password", "${env:PASSWORD}",
                 "--playlist-items", "2",
                 "https://www.picta.cu/medias/uso-eficiente-datos-2021-04-21-08-42-41-766550?playlist=3032"
                 //"https://www.youtube.com/watch?v=lJjAGZq18_A"
